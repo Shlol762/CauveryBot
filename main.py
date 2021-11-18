@@ -1,3 +1,6 @@
+import os
+import re
+
 import discord
 from discord.ext import commands
 from asyncio import get_event_loop
@@ -12,7 +15,14 @@ with open("C:/Users/Shlok/bot_stuff/safe_docs/cauverytoken.txt", 'r') as f:
     token: str = f.read()
 
 
-bot = commands.AutoShardedBot('!', case_insensitive=True)
+intents = discord.Intents.all()
+bot = commands.AutoShardedBot('!', case_insensitive=True, intents=intents,
+                              allowed_mentions=discord.AllowedMentions(everyone=False))
+
+
+for cog in os.listdir("C:/Users/Shlok/CauveryBot/cogs"):
+    if re.search(r"\.py", cog) and cog != '__init__.py':
+        bot.load_extension(f'cogs.{cog[:-3]}')
 
 
 loop = get_event_loop()
