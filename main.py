@@ -17,9 +17,10 @@ with open("C:/Users/Shlok/bot_stuff/safe_docs/cauverytoken.txt", 'r') as f:
 
 intents = discord.Intents.all()
 bot = commands.AutoShardedBot('!', case_insensitive=True, intents=intents,
-                              allowed_mentions=discord.AllowedMentions(everyone=False),
-                              status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching,
-                                                                                   name="over cauvery!"))
+          allowed_mentions=discord.AllowedMentions(everyone=False),
+          status=discord.Status.dnd,
+          activity=discord.Activity(type=discord.ActivityType.watching, name="over cauvery!")
+        )
 
 
 for cog in os.listdir("C:/Users/Shlok/CauveryBot/cogs"):
