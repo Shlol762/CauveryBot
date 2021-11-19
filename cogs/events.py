@@ -1,6 +1,6 @@
 from cogs import Cog, CommandError, CommandOnCooldown,\
     CommandNotFound, AutoShardedBot, Message, AuditLogAction,\
-    AuditLogEntry, Member
+    AuditLogEntry, Member, Context
 from datetime import datetime, timezone
 from pytz import timezone as tz
 
@@ -46,9 +46,10 @@ class Events(Cog):
 
     @Cog.listener('on_message_delete')
     async def on_message_delete(self, message: Message):
+        ctx: Context = await self.bot.get_context(message)
         time = time.strftime(TIM_FMT)
         with open(LOGS['del messages'], 'a') as f:
-            print(f'Message {message.id}:\n\tAuthor  - {message.author.id}'
+            print(f'Message {message.id}:\n\tAuthor  - {ctx.author.id}'
                   f'\n\tContent - {message.content}\n\tTime    - {time}',
                   file=f)
 
