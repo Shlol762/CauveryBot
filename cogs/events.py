@@ -23,9 +23,14 @@ class Events(Cog):
     @Cog.listener('on_shard_disconnect')
     async def on_shard_disconnect(self, id: int):
         with open(LOGS['shards'], 'a') as f:
-            print(f'WARNING! Shard continuity fail. {id} != {self.shard}', file=f) if id != self.shard else None
             print(f"Disconnected shard : {id} on {datetime.now().strftime('%d %B %Y at %X:%f')}", file=f)
 
+    @Cog.listener('on_shard_resumed')
+    async def on_shard_resumed(self, id: int):
+        with open(LOGS['shards'], 'a') as f:
+            self.shard = id
+            print(f'WARNING! Shard continuity fail. {id} != {self.shard}', file=f) if id != self.shard else None
+            print(f"Reconnection shard : {id} at {datetime.now().strftime('%d %B %Y at %X:%f')}", file=f)
 
     @Cog.listener('on_ready')
     async def on_ready(self):
