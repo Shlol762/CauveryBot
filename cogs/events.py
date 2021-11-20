@@ -1,6 +1,6 @@
 from cogs import Cog, CommandError, CommandOnCooldown,\
     CommandNotFound, AutoShardedBot, Message, AuditLogAction,\
-    AuditLogEntry, Member, Context, logger
+    AuditLogEntry, Member, Context, logger, DiscordException
 from datetime import datetime, timezone
 from pytz import timezone as tz
 
@@ -58,6 +58,17 @@ class Events(Cog):
                   f'\n\tContent - {message.content}\n\tTime    - {time}',
                   file=f)
 
+    @Cog.listener('on_command_error')
+    @logger
+    async def on_command_error(self, ctx: Context, error: CommandError):
+        raise error
+
+    @Cog.listener('on_error')
+    @logger
+    async def on_error(self, *args, **kwargs):
+        for arg in args + kwargs:
+            if isinstance(arg, DiscordException):
+                raise arg
 
 
 def setup(bot: AutoShardedBot):
