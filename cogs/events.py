@@ -61,6 +61,8 @@ class Events(Cog):
     @Cog.listener('on_command_error')
     @logger
     async def on_command_error(self, ctx: Context, error: CommandError):
+        if isinstance(error, CommandNotFound):
+            return
         raise error
 
     @Cog.listener('on_error')
