@@ -8,7 +8,9 @@ from pytz import timezone as tz
 LOGS = {
     'core': 'C:/Users/Shlok/CauveryBot/logs/core-log',
     'shards': 'C:/Users/Shlok/CauveryBot/logs/shards',
-    'del messages': 'C:/Users/Shlok/CauveryBot/logs/msgdel'
+    'del messages': 'C:/Users/Shlok/CauveryBot/logs/msgdel',
+    'comm error': 'C:/Users/Shlok/CauveryBot/logs/command-error',
+    'error': 'C:/Users/Shlok/CauveryBot/logs/error'
 }
 TIM_FMT = '%d %B %Y at %X:%f'
 
@@ -63,6 +65,9 @@ class Events(Cog):
     async def on_command_error(self, ctx: Context, error: CommandError):
         if isinstance(error, CommandNotFound):
             return
+        with open(LOGS['comm error'], 'a') as f:
+            print(f"Exception: {error.__class__.__name__} occured on {datetime.now().strftime(TIM_FMT)}",
+                  file=f)
         raise error
 
     @Cog.listener('on_error')
