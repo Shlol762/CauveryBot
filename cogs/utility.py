@@ -28,7 +28,7 @@ class Utility(Cog):
 
     @command(name='Announce', aliases=['an'],
              usage='!announce|an `<target(s)>`: `<text>`', help='Announce to people in Cauvery about something.')
-    async def remind(self, ctx: Context, *, text: str):
+    async def announce(self, ctx: Context, *, text: str):
         with open('C:/Users/Shlok/CauveryBot/json/people.json', 'r') as f:
             people: dict = json.load(f)
         if re.search(r'(<@!?[0-9]{18}>)+[ ]*:', text):

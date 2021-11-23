@@ -1,8 +1,9 @@
 from cogs import Cog, CommandError, CommandOnCooldown,\
     CommandNotFound, AutoShardedBot, Message, AuditLogAction,\
-    AuditLogEntry, Member, Context, logger, DiscordException
-from datetime import datetime, timezone
-from pytz import timezone as tz
+    AuditLogEntry, Member, Context, logger, DiscordException,\
+    ErrorView, Embed, Colour, log_entry_parser
+from datetime import datetime
+import traceback
 
 
 LOGS = {
@@ -68,7 +69,16 @@ class Events(Cog):
         with open(LOGS['comm error'], 'a') as f:
             print(f"Exception: {error.__class__.__name__} occured on {datetime.now().strftime(TIM_FMT)}",
                   file=f)
-        raise error
+        lines: list[str] = [f'Ignoring exception in on_command_error:\n']
+        lines.extend(traceback.format_exception(error.__class__.__name__, error, error.__traceback__))
+        embed = Embed(title='Command Excecution Error!',
+                      colour=Colour.dark_red(), timestamp=datetime.now(),
+                      description=f"```nim\n{''.join(lines[1:])[:3090]}```").set_footer(text=f'Log [#{log_entry_parser()}]',
+                                                                 icon_url='https://cdn.discordapp.com/emojis/849902617185484810.png?size=96')
+        lines = ''.join(lines)
+        print(lines)
+        view = ErrorView(ctx, 15.0, embed=embed)
+        view.message = await ctx.reply(f'Whoops! Something went wrong...', view=view)
 
     @Cog.listener('on_error')
     @logger

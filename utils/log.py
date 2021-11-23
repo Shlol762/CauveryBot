@@ -21,7 +21,7 @@ FILES = {
 def log_entry_parser() -> int:
     with open(LOGS['core'], 'r') as f:
         match = hex(int(re.search(r"\[#([a-f0-9]{4})]", f.readlines()[-1]).group(1), base=16))
-    return match
+    return match.removeprefix('0x')
 
 
 def logger(func: Union[Callable, Coroutine]):
